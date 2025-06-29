@@ -7,23 +7,22 @@ import userRouter from './routes/userRoute.js'
 import productRouter from './routes/productRoute.js'
 import cartRouter from './routes/cartRoute.js'
 import orderRouter from './routes/orderRoute.js'
+import projectRouter from './routes/projectRoute.js' // ✅ New line
 
-// App Config
 const app = express()
 const port = process.env.PORT || 4000
 
 connectDB()
 connectCloudinary()
 
-// middlewares
 app.use(express.json())
 app.use(cors())
 
-// api endpoints
 app.use('/api/user', userRouter)
 app.use('/api/product', productRouter)
 app.use('/api/cart', cartRouter)
 app.use('/api/order', orderRouter)
+app.use('/api/v2/projects', projectRouter) // ✅ New line
 
 app.get('/', (req, res) => {
     res.send("API Working")
