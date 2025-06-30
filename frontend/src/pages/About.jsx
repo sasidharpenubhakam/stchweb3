@@ -18,7 +18,7 @@ const About = () => {
                 We use 100% pure cotton with a heavyweight 240 GSM fabric that guarantees unbeatable comfort, breathability, and long-lasting quality. Each piece is crafted to offer a perfect balance of luxury feel and urban edge, making it ideal for everyday wear, casual outings, or trend-forward looks.
                 Whether you wear it to make a statement or keep it minimal, STCH BRAND is your go-to for authentic, high-quality fashion that fits your vibe.</p>
               <b className='text-gray-800'>Our Mission</b>
-              <p>Our mission at Forever is to empower customers with choice, convenience, and confidence. We're dedicated to providing a seamless shopping experience that exceeds expectations, from browsing and ordering to delivery and beyond.</p>
+              <p>Our mission at STCH is to empower customers with choice, convenience, and confidence. We're dedicated to providing a seamless shopping experience that exceeds expectations, from browsing and ordering to delivery and beyond.</p>
           </div>
       </div>
 

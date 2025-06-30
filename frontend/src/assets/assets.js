@@ -73,6 +73,8 @@ import contact_img from './nfem.png'
 import razorpay_logo from './razorpay_logo.png'
 import stripe_logo from './stripe_logo.png'
 import cross_icon from './cross_icon.png'
+import instagram_icon from './insta_logo.jpg' // ✅ Instagram icon added
+
 
 // Import your hero slider images
 import hero_1 from './hero_1.jpg'; // Make sure these file names match your actual files
@@ -99,6 +101,8 @@ export const assets = {
     razorpay_logo,
     stripe_logo,
     cross_icon,
+    instagram_icon, // ✅ Added here
+
 
     // Use your specific hero images for the slider
     hero_slider_images: [

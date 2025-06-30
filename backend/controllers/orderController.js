@@ -1,13 +1,12 @@
+// --- Updated orderController.js ---
 import orderModel from "../models/orderModel.js";
 import userModel from "../models/userModel.js";
 import Stripe from 'stripe';
 import razorpay from 'razorpay';
 
-// global variables
-const currency = 'inr'; // Use valid ISO currency code
+const currency = 'inr';
 const deliveryCharge = 10;
 
-// gateway initialize
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 const razorpayInstance = new razorpay({
@@ -15,7 +14,6 @@ const razorpayInstance = new razorpay({
     key_secret: process.env.RAZORPAY_KEY_SECRET,
 });
 
-// Placing orders using COD Method
 const placeOrder = async(req, res) => {
     try {
         const { userId, items, amount, address } = req.body;
@@ -27,7 +25,8 @@ const placeOrder = async(req, res) => {
             amount,
             paymentMethod: "COD",
             payment: false,
-            date: Date.now()
+            date: Date.now(),
+            status: "Pending"
         };
 
         const newOrder = new orderModel(orderData);
@@ -42,7 +41,6 @@ const placeOrder = async(req, res) => {
     }
 };
 
-// Placing orders using Stripe Method
 const placeOrderStripe = async(req, res) => {
     try {
         const { userId, items, amount, address } = req.body;
@@ -55,7 +53,8 @@ const placeOrderStripe = async(req, res) => {
             amount,
             paymentMethod: "Stripe",
             payment: false,
-            date: Date.now()
+            date: Date.now(),
+            status: "Pending"
         };
 
         const newOrder = new orderModel(orderData);
@@ -63,11 +62,9 @@ const placeOrderStripe = async(req, res) => {
 
         const line_items = items.map((item) => ({
             price_data: {
-                currency: currency, // 'inr'
-                product_data: {
-                    name: item.name
-                },
-                unit_amount: item.price * 100 // price in paise
+                currency: currency,
+                product_data: { name: item.name },
+                unit_amount: item.price * 100
             },
             quantity: item.quantity
         }));
@@ -75,9 +72,7 @@ const placeOrderStripe = async(req, res) => {
         line_items.push({
             price_data: {
                 currency: currency,
-                product_data: {
-                    name: 'Delivery Charges'
-                },
+                product_data: { name: 'Delivery Charges' },
                 unit_amount: deliveryCharge * 100
             },
             quantity: 1
@@ -91,17 +86,14 @@ const placeOrderStripe = async(req, res) => {
         });
 
         res.json({ success: true, session_url: session.url });
-
     } catch (error) {
         console.log(error);
         res.json({ success: false, message: error.message });
     }
 };
 
-// Verify Stripe 
 const verifyStripe = async(req, res) => {
     const { orderId, success, userId } = req.body;
-
     try {
         if (success === "true") {
             await orderModel.findByIdAndUpdate(orderId, { payment: true });
@@ -111,14 +103,12 @@ const verifyStripe = async(req, res) => {
             await orderModel.findByIdAndDelete(orderId);
             res.json({ success: false });
         }
-
     } catch (error) {
         console.log(error);
         res.json({ success: false, message: error.message });
     }
 };
 
-// Placing orders using Razorpay Method
 const placeOrderRazorpay = async(req, res) => {
     try {
         const { userId, items, amount, address } = req.body;
@@ -130,15 +120,16 @@ const placeOrderRazorpay = async(req, res) => {
             amount,
             paymentMethod: "Razorpay",
             payment: false,
-            date: Date.now()
+            date: Date.now(),
+            status: "Pending"
         };
 
         const newOrder = new orderModel(orderData);
         await newOrder.save();
 
         const options = {
-            amount: amount * 100, // convert to paise
-            currency: currency.toUpperCase(), // 'INR'
+            amount: amount * 100,
+            currency: currency.toUpperCase(),
             receipt: newOrder._id.toString()
         };
 
@@ -175,40 +166,49 @@ const verifyRazorpay = async(req, res) => {
     }
 };
 
-// All Orders data for Admin Panel
 const allOrders = async(req, res) => {
     try {
         const orders = await orderModel.find({});
         res.json({ success: true, orders });
-
     } catch (error) {
         console.log(error);
         res.json({ success: false, message: error.message });
     }
 };
 
-// User Order Data For Frontend
 const userOrders = async(req, res) => {
     try {
         const { userId } = req.body;
-
         const orders = await orderModel.find({ userId });
         res.json({ success: true, orders });
-
     } catch (error) {
         console.log(error);
         res.json({ success: false, message: error.message });
     }
 };
 
-// update order status from Admin Panel
 const updateStatus = async(req, res) => {
     try {
         const { orderId, status } = req.body;
-
         await orderModel.findByIdAndUpdate(orderId, { status });
         res.json({ success: true, message: 'Status Updated' });
+    } catch (error) {
+        console.log(error);
+        res.json({ success: false, message: error.message });
+    }
+};
 
+const cancelOrder = async(req, res) => {
+    try {
+        const { orderId } = req.body;
+        const order = await orderModel.findById(orderId);
+        if (!order) return res.json({ success: false, message: "Order not found" });
+        if (order.status === 'Shipped' || order.status === 'Delivered') {
+            return res.json({ success: false, message: "Cannot cancel a shipped or delivered order" });
+        }
+        order.status = 'Cancelled';
+        await order.save();
+        res.json({ success: true, message: "Order cancelled successfully" });
     } catch (error) {
         console.log(error);
         res.json({ success: false, message: error.message });
@@ -223,5 +223,6 @@ export {
     placeOrderRazorpay,
     allOrders,
     userOrders,
-    updateStatus
+    updateStatus,
+    cancelOrder
 };

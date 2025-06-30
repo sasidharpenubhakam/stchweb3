@@ -9,14 +9,14 @@ const Footer = () => {
         <div>
             <img src={assets.logo} className='mb-5 w-32' alt="" />
             <p className='w-full md:w-2/3 text-gray-600'>
-            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+            <p>Our mission at STCH is to empower customers with choice, convenience, and confidence. We're dedicated to providing a seamless shopping experience that exceeds expectations, from browsing and ordering to delivery and beyond.</p>
             </p>
         </div>
 
         <div>
             <p className='text-xl font-medium mb-5'>COMPANY</p>
             <ul className='flex flex-col gap-1 text-gray-600'>
-                <li><a href="/">Home</a></li>
+                <li><a href="/Home">Home</a></li>
                 <li><a href="/about-us">About us</a></li>
                 <li><a href="/delivery">Delivery</a></li>
                 <li><a href="/privacy-policy">Privacy policy</a></li>

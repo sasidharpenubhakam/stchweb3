@@ -16,10 +16,17 @@ connectDB()
 connectCloudinary()
 
 app.use(express.json())
-app.use(cors(
-    origin
-))
-
+app.use(
+    cors({
+        origin: [
+            "https://stchweb3.vercel.app",
+            "https://stchweb3-f4wc.vercel.app/",
+        ],
+        methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+        allowedHeaders: ["Content-Type", "Authorization"],
+        credentials: true,
+    })
+);
 app.use('/api/user', userRouter)
 app.use('/api/product', productRouter)
 app.use('/api/cart', cartRouter)
