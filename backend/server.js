@@ -19,8 +19,8 @@ app.use(express.json())
 app.use(
     cors({
         origin: [
-            "https://stchweb3.vercel.app",
-            "https://stchweb3-f4wc.vercel.app/",
+            "http://localhost:4000",
+            "http://localhost:5174",
         ],
         methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
         allowedHeaders: ["Content-Type", "Authorization"],
