@@ -35,7 +35,7 @@ const Footer = () => {
         <div>
             <p className='text-xl font-medium mb-5'>FOLLOW US</p>
             <div className='flex gap-4'> {/* Use flexbox for horizontal alignment of icons */}
-                <a href="https://www.instagram.com/your_instagram_profile" target="_blank" rel="noopener noreferrer">
+                <a href="https://www.instagram.com/stch_brand?utm_source=qr&igsh=ZWl0YjQ3N2h3bDZk" target="_blank" rel="noopener noreferrer">
                     <img src={assets.instagram_icon} alt="Instagram" className='w-8 h-8 cursor-pointer' />
                 {/* </a> */}
                 {/* { Add more social media links here } */}
