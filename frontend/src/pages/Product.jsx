@@ -79,7 +79,7 @@ const Product = () => {
       </div>
 
       {/* ---------- Description & Review Section ------------- */}
-      <div className='mt-20'>
+{/*       <div className='mt-20'>
         <div className='flex'>
           <b className='border px-5 py-3 text-sm'>Description</b>
           <p className='border px-5 py-3 text-sm'>Reviews (12)</p>
@@ -89,7 +89,7 @@ const Product = () => {
           <p>E-commerce websites typically display products or services along with detailed descriptions, images, prices, and any available variations (e.g., sizes, colors). Each product usually has its own dedicated page with relevant information.</p>
         </div>
       </div>
-
+ */}
       {/* --------- display related products ---------- */}
 
       <RelatedProducts category={productData.category} subCategory={productData.subCategory} />
