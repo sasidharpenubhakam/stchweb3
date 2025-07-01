@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from 'react'
 import { ShopContext } from '../context/ShopContext'
 import Title from '../components/Title';
 import axios from 'axios';
-import jwt_decode from 'jwt-decode';
 import { toast } from 'react-toastify';
 
 const Orders = () => {
@@ -20,16 +19,20 @@ const Orders = () => {
       const response = await axios.post(backendUrl + '/api/order/userorders',{},{headers:{token}})
       if (response.data.success) {
         let allOrdersItem = []
+        console.log("response order", response.data.orders);
         response.data.orders.map((order)=>{
           order.items.map((item)=>{
             item['status'] = order.status
             item['payment'] = order.payment
             item['paymentMethod'] = order.paymentMethod
             item['date'] = order.date
+            item['orderId'] = order._id
+            console.log("ITEM", item);
             allOrdersItem.push(item)
           })
         })
         setorderData(allOrdersItem.reverse())
+        console.log(allOrdersItem.reverse());
       }
 
     } catch (error) {
@@ -89,19 +92,19 @@ const Orders = () => {
                     </div>
                     <div className='md:w-1/2 flex justify-between items-center'>
                         <div className='flex items-center gap-2'>
-                          <>
-                          {(item.status !== 'Cancelled' && item.status !== 'Shipped' && item.status !== 'Delivered') && (
-                            <button
-                              onClick={() => handleCancelOrder(item.orderId || item._id)}
-                              className='border px-4 py-2 text-sm font-medium rounded-sm text-red-600 border-red-400 mr-2'>
-                              Cancel Order
-                            </button>
-                          )}
                             <p className='min-w-2 h-2 rounded-full bg-green-500'></p>
                             <p className='text-sm md:text-base'>{item.status}</p>
-                          </>
                         </div>
-                        <button onClick={loadOrderData} className='border px-4 py-2 text-sm font-medium rounded-sm'>Track Order</button>
+                        <div>
+                          {(item.status !== 'Cancelled' && item.status !== 'Shipped' && item.status !== 'Delivered') && (
+                              <button
+                                onClick={() => handleCancelOrder(item.orderId)}
+                                className='border px-4 py-2 text-sm font-medium rounded-sm text-red-600 border-red-400 mr-2'>
+                                Cancel Order
+                              </button>
+                          )}
+                          <button onClick={loadOrderData} className='border px-4 py-2 text-sm font-medium rounded-sm'>Track Order</button>
+                        </div>
                     </div>
                 </div>
               ))
