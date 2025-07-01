@@ -18,12 +18,7 @@ connectCloudinary()
 app.use(express.json())
 app.use(
     cors({
-        origin: [
-            "https://stchweb3-f4wc.vercel.app",
-            "https://stchweb3.vercel.app",
-        ],
-        methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-        allowedHeaders: ["Content-Type", "Authorization"],
+        origin: "*",
         credentials: true,
     })
 );
