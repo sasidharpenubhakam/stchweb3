@@ -2,6 +2,8 @@ import React, { useContext, useEffect, useState } from 'react'
 import { ShopContext } from '../context/ShopContext'
 import Title from '../components/Title';
 import axios from 'axios';
+import jwt_decode from 'jwt-decode';
+import { toast } from 'react-toastify';
 
 const Orders = () => {
 
@@ -35,6 +37,28 @@ const Orders = () => {
     }
   }
 
+  const handleCancelOrder = async (orderId) => {
+    try {
+      if (!token) {
+        toast.error('You must be logged in to cancel an order.');
+        return;
+      }
+      const response = await axios.post(
+        backendUrl + '/api/order/cancel',
+        { orderId },
+        { headers: { token } }
+      );
+      if (response.data.success) {
+        toast.success('Order cancelled successfully.');
+        loadOrderData();
+      } else {
+        toast.error(response.data.message || 'Failed to cancel order.');
+      }
+    } catch (error) {
+      toast.error('Error cancelling order.');
+    }
+  };
+
   useEffect(()=>{
     loadOrderData()
   },[token])
@@ -63,10 +87,19 @@ const Orders = () => {
                           <p className='mt-1'>Payment: <span className=' text-gray-400'>{item.paymentMethod}</span></p>
                         </div>
                     </div>
-                    <div className='md:w-1/2 flex justify-between'>
+                    <div className='md:w-1/2 flex justify-between items-center'>
                         <div className='flex items-center gap-2'>
+                          <>
+                          {(item.status !== 'Cancelled' && item.status !== 'Shipped' && item.status !== 'Delivered') && (
+                            <button
+                              onClick={() => handleCancelOrder(item.orderId || item._id)}
+                              className='border px-4 py-2 text-sm font-medium rounded-sm text-red-600 border-red-400 mr-2'>
+                              Cancel Order
+                            </button>
+                          )}
                             <p className='min-w-2 h-2 rounded-full bg-green-500'></p>
                             <p className='text-sm md:text-base'>{item.status}</p>
+                          </>
                         </div>
                         <button onClick={loadOrderData} className='border px-4 py-2 text-sm font-medium rounded-sm'>Track Order</button>
                     </div>
