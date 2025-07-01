@@ -11,6 +11,7 @@ const CartTotal = () => {
   const handleApplyCoupon = () => {
     const subtotal = getCartAmount();
     // Simple example: if coupon is "BUY2SAVE100" and subtotal is at least 999, discount is 100
+    console.log("Cart Data", couponCode, couponCode === 'prem123', subtotal, typeof(subtotal));
     if (couponCode === 'prem123' && subtotal >= 999) {
       setDiscount(100);
       setCouponApplied(true);
