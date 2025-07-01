@@ -1,4 +1,5 @@
 import userModel from "../models/userModel.js";
+import productModel from "../models/productModel.js";
 
 // Add products to user cart
 const addToCart = async(req, res) => {
@@ -64,14 +65,34 @@ const getUserCart = async(req, res) => {
     }
 };
 
-// ✅ Apply coupon logic
 const applyCoupon = async(req, res) => {
     try {
-        const { userId, coupon, subtotal } = req.body;
+        const { userId, coupon, subtotal, cartItems } = req.body;
+        console.log("HERE,", coupon, subtotal);
 
-        // Example logic: Coupon 'BUY2SAVE100' gives ₹100 off on ₹999+ cart
-        if (coupon === 'prem123' && subtotal >= 999) {
-            return res.json({ success: true, discount: 200 });
+        // GET10: 10% discount on subtotal
+        if (coupon === 'GET10' && subtotal > 0) {
+            const discount = Math.round(subtotal * 0.10);
+            return res.json({ success: true, discount });
+        }
+
+        // STCHGETONEFREE: If there are 4 or more t-shirts, discount price of cheapest t-shirt
+        if (coupon === 'STCHGETONEFREE' && cartItems) {
+            let tshirtItems = [];
+            for (const itemId in cartItems) {
+                const product = await productModel.findById(itemId);
+                if (product) {
+                    for (const size in cartItems[itemId]) {
+                        for (let i = 0; i < cartItems[itemId][size]; i++) {
+                            tshirtItems.push(product.price);
+                        }
+                    }
+                }
+            }
+            if (tshirtItems.length >= 4) {
+                const minPrice = Math.min(...tshirtItems);
+                return res.json({ success: true, discount: minPrice });
+            }
         }
 
         res.json({ success: false, message: 'Invalid or inapplicable coupon' });
