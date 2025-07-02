@@ -54,14 +54,18 @@ const getUserCart = async(req, res) => {
     try {
         const { userId } = req.body;
 
-        const userData = await userModel.findById(userId);
-        let cartData = await userData.cartData;
+        if (!userId) {
+            return res.status(400).json({ success: false, message: "User ID is required." });
+        }
 
+        // The primary fix: Use the safe getter
+        const cartData = await getCartDataSafe(userId);
+        
         res.json({ success: true, cartData });
 
     } catch (error) {
-        console.log(error);
-        res.json({ success: false, message: error.message });
+        console.error("Error in getUserCart:", error);
+        res.status(500).json({ success: false, message: error.message });
     }
 };
 
