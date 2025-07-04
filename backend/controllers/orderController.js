@@ -29,17 +29,12 @@ const placeOrder = async(req, res) => {
             status: "Pending"
         };
 
-        const cancelOrder = async(req, res) => {
-    try {
-        const { orderId } = req.body;
-        const order = await orderModel.findById(orderId);
-        if (!order) return res.json({ success: false, message: "Order not found" });
-        if (order.status === 'Shipped' || order.status === 'Delivered') {
-            return res.json({ success: false, message: "Cannot cancel a shipped or delivered order" });
-        }
-        order.status = 'Cancelled by Customer'; // ✅ updated status
-        await order.save();
-        res.json({ success: true, message: "Order cancelled successfully" });
+      const newOrder = new orderModel(orderData);
+        await newOrder.save();
+
+        await userModel.findByIdAndUpdate(userId, { cartData: {} });
+
+        res.json({ success: true, message: "Order Placed" });
     } catch (error) {
         console.log(error);
         res.json({ success: false, message: error.message });
