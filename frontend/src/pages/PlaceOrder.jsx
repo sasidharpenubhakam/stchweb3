@@ -36,7 +36,7 @@ const PlaceOrder = () => {
             name:'Order Payment',
             description:'Order Payment',
             order_id: order.id,
-            receipt: order.receipt,
+            // receipt: order.receipt,
             handler: async (response) => {
                 console.log(response)
                 try {
