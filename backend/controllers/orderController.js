@@ -1,11 +1,10 @@
-// --- Updated orderController.js ---
 import orderModel from "../models/orderModel.js";
 import userModel from "../models/userModel.js";
 import Stripe from 'stripe';
 import razorpay from 'razorpay';
 
-const currency = 'INR';
-const deliveryCharge = 29;
+const currency = 'inr';
+const deliveryCharge = 10;
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
@@ -14,7 +13,7 @@ const razorpayInstance = new razorpay({
     key_secret: process.env.RAZORPAY_KEY_SECRET,
 });
 
-const placeOrder = async(req, res) => {
+const placeOrder = async (req, res) => {
     try {
         const { userId, items, amount, address } = req.body;
 
@@ -29,7 +28,7 @@ const placeOrder = async(req, res) => {
             status: "Pending"
         };
 
-      const newOrder = new orderModel(orderData);
+        const newOrder = new orderModel(orderData);
         await newOrder.save();
 
         await userModel.findByIdAndUpdate(userId, { cartData: {} });
@@ -41,8 +40,7 @@ const placeOrder = async(req, res) => {
     }
 };
 
-
-const placeOrderStripe = async(req, res) => {
+const placeOrderStripe = async (req, res) => {
     try {
         const { userId, items, amount, address } = req.body;
         const { origin } = req.headers;
@@ -93,24 +91,7 @@ const placeOrderStripe = async(req, res) => {
     }
 };
 
-const verifyStripe = async(req, res) => {
-    const { orderId, success, userId } = req.body;
-    try {
-        if (success === "true") {
-            await orderModel.findByIdAndUpdate(orderId, { payment: true });
-            await userModel.findByIdAndUpdate(userId, { cartData: {} });
-            res.json({ success: true });
-        } else {
-            await orderModel.findByIdAndDelete(orderId);
-            res.json({ success: false });
-        }
-    } catch (error) {
-        console.log(error);
-        res.json({ success: false, message: error.message });
-    }
-};
-
-const placeOrderRazorpay = async(req, res) => {
+const placeOrderRazorpay = async (req, res) => {
     try {
         const { userId, items, amount, address } = req.body;
 
@@ -134,12 +115,12 @@ const placeOrderRazorpay = async(req, res) => {
             receipt: newOrder._id.toString()
         };
 
-        await razorpayInstance.orders.create(options, (error, order) => {
-            if (error) {
-                console.log(error);
-                return res.json({ success: false, message: error });
-            }
-            res.json({ success: true, order });
+        const razorpayOrder = await razorpayInstance.orders.create(options);
+
+        res.json({
+            success: true,
+            razorpayOrder,
+            appOrderId: newOrder._id
         });
 
     } catch (error) {
@@ -148,26 +129,38 @@ const placeOrderRazorpay = async(req, res) => {
     }
 };
 
-const verifyRazorpay = async(req, res) => {
+const verifyRazorpay = async (req, res) => {
     try {
-        const { userId, razorpay_order_id } = req.body;
+        const { appOrderId, userId } = req.body;
 
-        const orderInfo = await razorpayInstance.orders.fetch(razorpay_order_id);
-        if (orderInfo.status === 'paid') {
-            await orderModel.findByIdAndUpdate(orderInfo.receipt, { payment: true });
-            await userModel.findByIdAndUpdate(userId, { cartData: {} });
-            res.json({ success: true, message: "Payment Successful" });
-        } else {
-            res.json({ success: false, message: 'Payment Failed' });
-        }
+        await orderModel.findByIdAndUpdate(appOrderId, { payment: true });
+        await userModel.findByIdAndUpdate(userId, { cartData: {} });
 
+        res.json({ success: true, message: "Payment Successful" });
     } catch (error) {
         console.log(error);
         res.json({ success: false, message: error.message });
     }
 };
 
-const allOrders = async(req, res) => {
+const verifyStripe = async (req, res) => {
+    const { orderId, success, userId } = req.body;
+    try {
+        if (success === "true") {
+            await orderModel.findByIdAndUpdate(orderId, { payment: true });
+            await userModel.findByIdAndUpdate(userId, { cartData: {} });
+            res.json({ success: true });
+        } else {
+            await orderModel.findByIdAndDelete(orderId);
+            res.json({ success: false });
+        }
+    } catch (error) {
+        console.log(error);
+        res.json({ success: false, message: error.message });
+    }
+};
+
+const allOrders = async (req, res) => {
     try {
         const orders = await orderModel.find({});
         res.json({ success: true, orders });
@@ -177,7 +170,7 @@ const allOrders = async(req, res) => {
     }
 };
 
-const userOrders = async(req, res) => {
+const userOrders = async (req, res) => {
     try {
         const { userId } = req.body;
         const orders = await orderModel.find({ userId });
@@ -188,7 +181,7 @@ const userOrders = async(req, res) => {
     }
 };
 
-const updateStatus = async(req, res) => {
+const updateStatus = async (req, res) => {
     try {
         const { orderId, status } = req.body;
         await orderModel.findByIdAndUpdate(orderId, { status });
@@ -199,7 +192,7 @@ const updateStatus = async(req, res) => {
     }
 };
 
-const cancelOrder = async(req, res) => {
+const cancelOrder = async (req, res) => {
     try {
         const { orderId } = req.body;
         const order = await orderModel.findById(orderId);
@@ -207,7 +200,7 @@ const cancelOrder = async(req, res) => {
         if (order.status === 'Shipped' || order.status === 'Delivered') {
             return res.json({ success: false, message: "Cannot cancel a shipped or delivered order" });
         }
-        order.status = 'Cancelled';
+        order.status = 'Cancelled by Customer';
         await order.save();
         res.json({ success: true, message: "Order cancelled successfully" });
     } catch (error) {
@@ -227,3 +220,4 @@ export {
     updateStatus,
     cancelOrder
 };
+
