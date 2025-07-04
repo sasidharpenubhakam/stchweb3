@@ -18,7 +18,7 @@ connectCloudinary()
 app.use(express.json())
 app.use(
     cors({
-        origin: "*",
+        origin: 'https://stchweb3-f4wc.vercel.app',
         credentials: true,
     })
 );
