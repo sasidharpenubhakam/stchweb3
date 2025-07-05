@@ -3,8 +3,8 @@ import userModel from "../models/userModel.js";
 import Stripe from 'stripe';
 import razorpay from 'razorpay';
 
-const currency = 'INR';
-const deliveryCharge = 10;
+const currency = "INR";
+const deliveryCharge = 100;
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
