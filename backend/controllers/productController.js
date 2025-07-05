@@ -1,7 +1,7 @@
-import { v2 as cloudinary } from "cloudinary"
-import productModel from "../models/productModel.js"
+import { v2 as cloudinary } from "cloudinary";
+import productModel from "../models/productModel.js";
 
-// Add new product
+// Add a product
 const addProduct = async (req, res) => {
   try {
     const { name, description, price, category, subCategory, sizes, bestseller } = req.body;
@@ -37,7 +37,7 @@ const addProduct = async (req, res) => {
   }
 };
 
-// List products
+// Get all products
 const listProducts = async (req, res) => {
   try {
     const products = await productModel.find({});
@@ -71,7 +71,7 @@ const singleProduct = async (req, res) => {
   }
 };
 
-// Add a review
+// ✅ Add a review to a product
 const addReview = async (req, res) => {
   try {
     const { productId, username, comment, rating } = req.body;
