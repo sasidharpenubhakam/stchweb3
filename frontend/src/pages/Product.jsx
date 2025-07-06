@@ -35,7 +35,7 @@ const Product = () => {
       return;
     }
 
-    const res = await fetch('http://localhost:5000/api/product/add-review', {
+    const res = await fetch('https://stchweb3.onrender.com//api/product/add-review', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
