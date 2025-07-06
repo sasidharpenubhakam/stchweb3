@@ -13,32 +13,32 @@ const razorpayInstance = new razorpay({
     key_secret: process.env.RAZORPAY_KEY_SECRET,
 });
 
-const placeOrder = async (req, res) => {
-    try {
-        const { userId, items, amount, address } = req.body;
+// const placeOrder = async (req, res) => {
+//     try {
+//         const { userId, items, amount, address } = req.body;
 
-        const orderData = {
-            userId,
-            items,
-            address,
-            amount,
-            paymentMethod: "COD",
-            payment: false,
-            date: Date.now(),
-            status: "Pending"
-        };
+//         const orderData = {
+//             userId,
+//             items,
+//             address,
+//             amount,
+//             paymentMethod: "COD",
+//             payment: false,
+//             date: Date.now(),
+//             status: "Pending"
+//         };
 
-        const newOrder = new orderModel(orderData);
-        await newOrder.save();
+//         const newOrder = new orderModel(orderData);
+//         await newOrder.save();
 
-        await userModel.findByIdAndUpdate(userId, { cartData: {} });
+//         await userModel.findByIdAndUpdate(userId, { cartData: {} });
 
-        res.json({ success: true, message: "Order Placed" });
-    } catch (error) {
-        console.log(error);
-        res.json({ success: false, message: error.message });
-    }
-};
+//         res.json({ success: true, message: "Order Placed" });
+//     } catch (error) {
+//         console.log(error);
+//         res.json({ success: false, message: error.message });
+//     }
+// };
 
 const placeOrderStripe = async (req, res) => {
     try {
