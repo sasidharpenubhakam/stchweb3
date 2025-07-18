@@ -79,7 +79,7 @@ const applyCoupon = async(req, res) => {
         console.log("HERE,", coupon, subtotal);
 
         // GET10: 20% discount on subtotal
-         if (coupon === 'STCH10' && subtotal > 0) {
+         if (coupon === 'DBR200' && subtotal > 0) {
             const discount = Math.round(subtotal * 0.20);
             return res.json({ success: true, discount });
     }
