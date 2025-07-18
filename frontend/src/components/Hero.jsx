@@ -46,7 +46,7 @@ const Hero = () => {
           </div>
         </div>
       </div>
-      {/* Hero Right Side - Slider */}
+{/*       {/* Hero Right Side - Slider */}
       <div className='w-full sm:w-1/2 relative overflow-hidden'>
         <img
           className='w-full h-full object-cover transition-opacity duration-500 ease-in-out'
@@ -88,4 +88,4 @@ const Hero = () => {
   );
 };
 
-export default Hero;
+export default Hero; */}
