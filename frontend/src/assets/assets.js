@@ -78,8 +78,8 @@ import instagram_icon from './insta_logo.jpg' // ✅ Instagram icon added
 
 // Import your hero slider images
 import hero_1 from './hero_1.jpg'; // Make sure these file names match your actual files
-// import hero_2 from './arrow.jpg';
-// import hero_3 from './nano.jpg';
+import hero_2 from './arrow.jpg';
+import hero_3 from './nano.jpg';
 
 
 export const assets = {
