@@ -1,38 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react'; // We no longer need useState or useEffect for a static image
 import { assets } from '../assets/assets';
 
 const Hero = () => {
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  // Remove all state and effect hooks related to the slider
+  // const [currentImageIndex, setCurrentImageIndex] = useState(0); // REMOVE THIS LINE
 
-  // Array of images for the slider
-  const sliderImages = assets.hero_slider_images || [assets.hero_img]; // Fallback to hero_img if slider_images not defined
+  // Remove the sliderImages array definition
+  // const sliderImages = assets.hero_slider_images || [assets.hero_img]; // REMOVE THIS LINE
 
-  // Function to go to the next image
-  const nextImage = () => {
-    setCurrentImageIndex((prevIndex) =>
-      prevIndex === sliderImages.length - 1 ? 0 : prevIndex + 1
-    );
-  };
+  // Remove the navigation functions
+  // const nextImage = () => { ... }; // REMOVE THIS FUNCTION
+  // const prevImage = () => { ... }; // REMOVE THIS FUNCTION
 
-  // Function to go to the previous image
-  const prevImage = () => {
-    setCurrentImageIndex((prevIndex) =>
-      prevIndex === 0 ? sliderImages.length - 1 : prevIndex - 1
-    );
-  };
-
-  // Optional: Automatic sliding
-  useEffect(() => {
-    const interval = setInterval(() => {
-      nextImage();
-    }, 5000); // Change image every 5 seconds
-
-    return () => clearInterval(interval); // Clear interval on component unmount
-  }, [currentImageIndex]); // Re-run effect when currentImageIndex changes
+  // Remove the automatic sliding effect
+  // useEffect(() => { ... }, [currentImageIndex]); // REMOVE THIS useEffect BLOCK
 
   return (
     <div className='flex flex-col sm:flex-row border border-gray-400 relative'>
-      {/* Hero Left Side */}
+      {/* Hero Left Side - This part remains the same */}
       <div className='w-full sm:w-1/2 flex items-center justify-center py-10 sm:py-0'>
         <div className='text-[#414141]'>
           <div className='flex items-center gap-2'>
@@ -46,15 +31,19 @@ const Hero = () => {
           </div>
         </div>
       </div>
-      {/* Hero Right Side - Slider */}
+      {/* Hero Right Side - Change this to display a static image */}
       <div className='w-full sm:w-1/2 relative overflow-hidden'>
         <img
-          className='w-full h-full object-cover transition-opacity duration-500 ease-in-out'
-          src={sliderImages[currentImageIndex]}
-          alt={`Hero Image ${currentImageIndex + 1}`}
-          key={currentImageIndex} // Add key for re-rendering on image change
+          className='w-full h-full object-cover' // Removed 'transition-opacity duration-500 ease-in-out' as it's no longer needed
+          src={assets.hero_img} // This will now always display your 'hero_img'
+          alt="Hero Image for Latest Arrivals" // Update alt text as appropriate
+          // Removed 'key={currentImageIndex}' as it's not a dynamic image anymore
         />
-        {/* Navigation Buttons */}
+        {/*
+          Remove the navigation buttons and dots/indicators,
+          as they are part of the slider functionality.
+        */}
+        {/* REMOVE THIS BLOCK
         {sliderImages.length > 1 && (
           <>
             <button
@@ -71,7 +60,8 @@ const Hero = () => {
             </button>
           </>
         )}
-        {/* Dots/Indicators (Optional) */}
+        */}
+        {/* REMOVE THIS BLOCK
         <div className='absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2'>
           {sliderImages.map((_, index) => (
             <span
@@ -83,6 +73,7 @@ const Hero = () => {
             ></span>
           ))}
         </div>
+        */}
       </div>
     </div>
   );
