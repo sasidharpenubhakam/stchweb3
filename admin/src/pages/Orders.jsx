@@ -87,7 +87,7 @@ const Orders = ({ token }) => {
                 <option value="Shipped">Shipped</option>
                 <option value="Out for delivery">Out for delivery</option>
                 <option value="Delivered">Delivered</option>
-                  <option value="Cancelled by Customer"  disabled={true} >Cancelled by Customer</option> {/* ✅ Add this */}
+                  <option value="Cancelled by Customer"  >Cancelled by Customer</option> {/* ✅ Add this */}
 
               </select>
             </div>
