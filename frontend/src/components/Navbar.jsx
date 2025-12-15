@@ -32,41 +32,37 @@ const Navbar = () => {
         border-b border-white/30
         shadow-sm
       ">
-        <div className="flex items-center justify-between px-6 py-4 font-medium">
+        <div className="flex items-center justify-between px-6 py-2 font-medium">
 
           {/* Logo */}
           <Link to="/">
-            <img src={assets.logo} className="w-36" alt="Logo" />
+            <img src={assets.logo} className="w-28" alt="Logo" />
           </Link>
 
           {/* Desktop Menu */}
           <ul className="hidden sm:flex gap-6 text-sm text-gray-800">
-            {['/', '/collection', '/about', '/contact'].map((path, i) => (
-              <NavLink
-                key={i}
-                to={path}
-                className={({ isActive }) =>
-                  `flex flex-col items-center gap-1 ${
-                    isActive ? 'text-black' : ''
-                  }`
-                }
-              >
-                <p>
-                  {path === '/' ? 'HOME' : path.replace('/', '').toUpperCase()}
-                </p>
-                <hr className="w-2/4 h-[1.5px] bg-gray-700 border-none hidden group-hover:block" />
-              </NavLink>
-            ))}
+            <NavLink to="/" className="flex flex-col items-center gap-0.5">
+              <p>HOME</p>
+            </NavLink>
+            <NavLink to="/collection" className="flex flex-col items-center gap-0.5">
+              <p>COLLECTION</p>
+            </NavLink>
+            <NavLink to="/about" className="flex flex-col items-center gap-0.5">
+              <p>ABOUT</p>
+            </NavLink>
+            <NavLink to="/contact" className="flex flex-col items-center gap-0.5">
+              <p>CONTACT</p>
+            </NavLink>
           </ul>
 
           {/* Right Icons */}
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-5">
 
             {/* Search */}
             <img
               onClick={() => { setShowSearch(true); navigate('/collection') }}
               src={assets.search_icon}
-              className="w-5 cursor-pointer"
+              className="w-4 cursor-pointer"
               alt="Search"
             />
 
@@ -75,15 +71,15 @@ const Navbar = () => {
               <img
                 onClick={() => token ? null : navigate('/login')}
                 src={assets.profile_icon}
-                className="w-5 cursor-pointer"
+                className="w-4 cursor-pointer"
                 alt="Profile"
               />
 
               {token && (
-                <div className="absolute right-0 pt-4 hidden group-hover:block">
+                <div className="absolute right-0 pt-3 hidden group-hover:block">
                   <div className="
                     flex flex-col gap-2 w-36
-                    py-3 px-5
+                    py-2 px-4
                     bg-white/80 backdrop-blur-md
                     text-gray-600 rounded shadow
                   ">
@@ -97,10 +93,10 @@ const Navbar = () => {
 
             {/* Cart */}
             <Link to="/cart" className="relative">
-              <img src={assets.cart_icon} className="w-5" alt="Cart" />
+              <img src={assets.cart_icon} className="w-4" alt="Cart" />
               <span className="
                 absolute -right-1 -bottom-1
-                w-4 h-4 text-[8px]
+                w-3.5 h-3.5 text-[8px]
                 bg-black text-white
                 rounded-full flex items-center justify-center
               ">
@@ -112,7 +108,7 @@ const Navbar = () => {
             <img
               onClick={() => setVisible(true)}
               src={assets.menu_icon}
-              className="w-5 cursor-pointer sm:hidden"
+              className="w-4 cursor-pointer sm:hidden"
               alt="Menu"
             />
           </div>
@@ -129,21 +125,21 @@ const Navbar = () => {
         <div className="flex flex-col text-gray-700">
           <div
             onClick={() => setVisible(false)}
-            className="flex items-center gap-4 p-4 cursor-pointer"
+            className="flex items-center gap-4 p-3 cursor-pointer"
           >
-            <img src={assets.dropdown_icon} className="h-4 rotate-180" alt="Back" />
+            <img src={assets.dropdown_icon} className="h-3 rotate-180" alt="Back" />
             <p>Back</p>
           </div>
 
-          <NavLink onClick={() => setVisible(false)} className="py-3 pl-6 border" to="/">HOME</NavLink>
-          <NavLink onClick={() => setVisible(false)} className="py-3 pl-6 border" to="/collection">COLLECTION</NavLink>
-          <NavLink onClick={() => setVisible(false)} className="py-3 pl-6 border" to="/about">ABOUT</NavLink>
-          <NavLink onClick={() => setVisible(false)} className="py-3 pl-6 border" to="/contact">CONTACT</NavLink>
+          <NavLink onClick={() => setVisible(false)} className="py-2 pl-6 border" to="/">HOME</NavLink>
+          <NavLink onClick={() => setVisible(false)} className="py-2 pl-6 border" to="/collection">COLLECTION</NavLink>
+          <NavLink onClick={() => setVisible(false)} className="py-2 pl-6 border" to="/about">ABOUT</NavLink>
+          <NavLink onClick={() => setVisible(false)} className="py-2 pl-6 border" to="/contact">CONTACT</NavLink>
         </div>
       </div>
 
-      {/* Spacer so content does not hide behind fixed navbar */}
-      <div className="h-[80px]" />
+      {/* Spacer for fixed navbar */}
+      <div className="h-[56px]" />
     </>
   )
 }
