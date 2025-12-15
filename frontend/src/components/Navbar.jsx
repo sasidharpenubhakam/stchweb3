@@ -36,7 +36,7 @@ const Navbar = () => {
 
           {/* Logo */}
           <Link to="/">
-            <img src={assets.logo} className="w-28" alt="Logo" />
+            <img src={assets.logo} className="w-20" alt="Logo" />
           </Link>
 
           {/* Desktop Menu */}
