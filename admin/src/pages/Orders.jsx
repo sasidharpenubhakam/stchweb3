@@ -8,7 +8,8 @@ import { assets } from '../assets/assets'
 
 const Orders = ({ token }) => {
 
-  const [orders, setOrders] = useState([])
+  const [orders, setOrders] = useState([]);
+  
 
   const fetchAllOrders = async () => {
 
@@ -20,7 +21,7 @@ const Orders = ({ token }) => {
 
       const response = await axios.post(backendUrl + '/api/order/list', {}, { headers: { token } })
       if (response.data.success) {
-        setOrders(response.data.orders.reverse())
+        setOrders(response.data.orders.reverse());
       } else {
         toast.error(response.data.message)
       }
@@ -36,7 +37,9 @@ const Orders = ({ token }) => {
     try {
       const response = await axios.post(backendUrl + '/api/order/status' , {orderId, status:event.target.value}, { headers: {token}})
       if (response.data.success) {
-        await fetchAllOrders()
+        await fetchAllOrders() 
+        
+        
       }
     } catch (error) {
       console.log(error)
@@ -79,9 +82,11 @@ const Orders = ({ token }) => {
                 <p className='mt-3'>Method : {order.paymentMethod}</p>
                 <p>Payment : { order.payment ? 'Done' : 'Pending' }</p>
                 <p>Date : {new Date(order.date).toLocaleDateString()}</p>
-              </div>
-              <p className='text-sm sm:text-[15px]'>{currency}{order.amount}</p>
-              <select onChange={(event)=>statusHandler(event,order._id)} value={order.status} className='p-2 font-semibold'>
+              </div> 
+              <p className='text-sm sm:text-[15px]'>{currency}{order.amount}</p> 
+              { order.status=="Cancelled by Customer"?(<p>Cancelled</p>):
+                (
+                   <select onChange={(event)=>statusHandler(event,order._id)} value={order.status} className='p-2 font-semibold'>
                 <option value="Order Placed">Order Placed</option>
                 <option value="Packing">Packing</option>
                 <option value="Shipped">Shipped</option>
@@ -90,6 +95,11 @@ const Orders = ({ token }) => {
                   <option value="Cancelled by Customer"  >Cancelled by Customer</option> {/* ✅ Add this */}
 
               </select>
+
+                  )
+
+                  }
+             
             </div>
           ))
         }
