@@ -61,7 +61,7 @@ const Footer = () => {
       {/* Bottom Section */}
       <div className='border-t border-gray-700 mt-10'>
         <p className='py-4 text-sm text-center text-gray-400'>
-          Copyright 2024 @ STCH.com - All Rights Reserved.
+          Copyright 2026 @ STCH.com - All Rights Reserved.
         </p>
 
         <p className='pb-6 text-sm text-center text-gray-400'>
