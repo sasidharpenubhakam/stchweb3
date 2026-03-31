@@ -65,7 +65,7 @@ const Footer = () => {
         </p>
 
         <p className='pb-6 text-sm text-center text-gray-400'>
-          Developed by Mr. Sasidhar Penubhakam 
+          Developed by Mr. SasidhaR Penubhakam 
           <span className="text-white ml-1">&#10084;</span>
         </p>
       </div>
